@@ -32,10 +32,16 @@ JOIN "warehouse" ON "warehouse_product".warehouse_id = "warehouse".id WHERE "pro
 
 --Stretch Requirements
 -- 9. How much was the total cost for each order?
-
+SELECT sum("products".unit_price * "line_items".quantity) as "total_order_cost", "orders".id as "order_id" FROM "products" 
+JOIN "line_items" ON "products".id = "line_items".product_id
+JOIN "orders" ON "line_items".order_id = "orders".id GROUP BY "orders".id;
 
 -- 10. How much has each customer spent in total?
-
+SELECT sum("products".unit_price * "line_items".quantity) as "total_order_cost","customers".first_name, "customers".last_name, "customers".id 
+FROM "products" JOIN "line_items" ON "products".id = "line_items".product_id
+JOIN "orders" ON "line_items".order_id = "orders".id
+JOIN "addresses" ON "orders".address_id = "addresses".id
+JOIN "customers" ON "addresses".customer_id = "customers".id GROUP BY "customers".id;
 
 -- 11. How much has each customer spent in total? Customers who have spent $0 should still show up in the table. It should say 0, not NULL (research coalesce).
 
