@@ -50,3 +50,10 @@ LEFT JOIN "orders" ON "orders".address_id = "addresses".id
 LEFT JOIN "line_items" ON "line_items".order_id = "orders".id
 LEFT JOIN "products"  ON "products".id = "line_items".product_id
 GROUP BY "customers".id;
+
+--or
+SELECT COALESCE(sum("products".unit_price * "line_items".quantity), 0) as "total_order_cost","customers".first_name, "customers".last_name, "customers".id 
+FROM "products" JOIN "line_items" ON "products".id = "line_items".product_id
+JOIN "orders" ON "line_items".order_id = "orders".id
+JOIN "addresses" ON "orders".address_id = "addresses".id
+FULL JOIN "customers" ON "addresses".customer_id = "customers".id GROUP BY "customers".id;
